@@ -11,7 +11,7 @@ from matplotlib.patches import ConnectionPatch
 
 
 ```python
-ploidy_path ='/egp-data/research-g42-khalifa-pfs/data_Request/Merged_files/APfiles/UAE_ploidy_estimation_metrics_merged.csv'
+ploidy_path ='UAE_ploidy_estimation_metrics_merged.csv'
 ploidy = pd.read_csv(ploidy_path, sep=",")
 ploidy.head(1)
 

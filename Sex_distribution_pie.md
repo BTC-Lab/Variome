@@ -223,8 +223,5 @@ plt.savefig("../sex_distribution_pie.png", bbox_inches='tight')
 plt.show()
 ```
 
-
-    
-![png](sex_distribution_pie_files/sex_distribution_pie_6_0.png)
     
 

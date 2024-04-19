@@ -26,19 +26,7 @@ display(snp_indel.head(1))
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -66,19 +54,7 @@ display(snp_indel.head(1))
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -139,19 +115,7 @@ display(snp_indel.head(1))
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -182,19 +146,7 @@ sums_sv
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -241,19 +193,7 @@ sums_snpIndel
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -331,50 +271,4 @@ plt.pie(sums_sv[0],   labels=sums_sv['index'].values.tolist(), explode=[0.01,0.0
 plt.savefig('../variant_pies_b.png', dpi=300)
 plt.savefig('../variant_pies_b.pdf', dpi=300)
 plt.show()
-```
-
-
-    
-![png](variant_pies_files/variant_pies_6_0.png)
-    
-
-
-
-```python
-color = color_pallete.loc[0:len(sums_snpIndel)][0].values.tolist()
-legend = sums_snpIndel['index'].values.tolist()
-
-#plt.figure()
-#f, ax = plt.subplots()
-plt.figure(figsize=properties['figsize']['pie'])
-plt.title(properties['title'])
-
-
-# for labels:  labels=sums_snpIndel['index'].values.tolist(), 
-plt.pie(sums_snpIndel[0],  labels=legend,explode=[0.01,0.01], colors=color, autopct=lambda p:f'{p:.2f}% ({p*sum(data)/100 :.0f})',labeldistance=.5,
-        pctdistance=0.4,
-        textprops={
-        'color': 'white',
-        'fontsize': 15,
-        'fontweight': 'bold',
-        'ha': 'center',
-        'va': 'bottom',
-        'rotation': 0
-    })
-#plt.legend(labels=legend, loc = properties['legend_location'], ncol=len(legend))
-
-plt.savefig('../8nov/variant_pies_a.png', dpi=300)
-plt.savefig('../8nov/variant_pies_a.pdf', dpi=300)
-plt.show()
-```
-
-
-    
-![png](variant_pies_files/variant_pies_7_0.png)
-    
-
-
-
-```python
-
 ```

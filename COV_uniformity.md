@@ -160,13 +160,3 @@ ax.legend()
 #plt.savefig("cov_uniformity.png")
 plt.show()
 ```
-
-    No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
-    
- 
-
-
-
-```python
-
-```

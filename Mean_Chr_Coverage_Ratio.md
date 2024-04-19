@@ -20,19 +20,7 @@ ploidy.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -111,19 +99,7 @@ ploidy2
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -457,18 +433,6 @@ plt.show()
 #plt.savefig("mean_chr_coverage_ratio.png")
 #plt.savefig("mean_chr_coverage_ratio.pdf")
 ```
-
-    /opt/conda/lib/python3.10/site-packages/seaborn/categorical.py:82: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
-      plot_data = [np.asarray(s, float) for k, s in iter_data]
-    /opt/conda/lib/python3.10/site-packages/seaborn/categorical.py:82: FutureWarning: iteritems is deprecated and will be removed in a future version. Use .items instead.
-      plot_data = [np.asarray(s, float) for k, s in iter_data]
-    
-
-
-    
-![png](mean_chr_coverage_ratio_files/mean_chr_coverage_ratio_3_1.png)
-    
-
 
 
 ```python

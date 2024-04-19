@@ -10,8 +10,8 @@ plt.rcParams['figure.figsize']=[20,10]
 
 
 ```python
-sv_path = '/egp-data/research-g42-khalifa-pfs/data_Request/Merged_files/APfiles/UAE_sv_metrics_merged.csv'
-cnv_path = '/egp-data/research-g42-khalifa-pfs/data_Request/Merged_files/APfiles/UAE_cnv_metrics_merged.txt'
+sv_path = 'UAE_sv_metrics_merged.csv'
+cnv_path = 'UAE_cnv_metrics_merged.txt'
 snp_indel_path = '../data/snps_indels.txt'
 
 snp_indel = pd.read_csv(snp_indel_path, sep=",")

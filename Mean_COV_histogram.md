@@ -9,7 +9,7 @@ pd.set_option('display.max_rows', 200)
 
 
 ```python
-wgsCov_path = '/egp-data/research-g42-khalifa-pfs/data_Request/Merged_files/APfiles/UAE_wgs_mean_cov_merged.txt'
+wgsCov_path = 'UAE_wgs_mean_cov_merged.txt'
 ```
 
 
@@ -25,19 +25,7 @@ wgsCov.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -85,9 +73,3 @@ ax.set(ylabel='Frequency')
 #ax.legend('Mean Coverage')
 #plt.savefig('mean_cov_histogram.png', dpi=300)
 ```
-
-
-    
-![png](mean_cov_histogram_files/mean_cov_histogram_3_0.png)
-    
-

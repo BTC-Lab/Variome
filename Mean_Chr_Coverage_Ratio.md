@@ -51,7 +51,7 @@ ploidy.head(1)
   <tbody>
     <tr>
       <th>0</th>
-      <td>PGP00019334</td>
+      <td>sample1</td>
       <td>47.66</td>
       <td>46.96</td>
       <td>0.0</td>

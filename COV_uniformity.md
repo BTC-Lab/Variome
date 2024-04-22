@@ -51,7 +51,7 @@ cnv.head(3)
   <tbody>
     <tr>
       <th>0</th>
-      <td>PGP00019334</td>
+      <td>sample1</td>
       <td>XX</td>
       <td>0.9812</td>
       <td>3105715063</td>
@@ -75,7 +75,7 @@ cnv.head(3)
     </tr>
     <tr>
       <th>1</th>
-      <td>PGP0002329</td>
+      <td>sample2</td>
       <td>XY</td>
       <td>0.9989</td>
       <td>3105715063</td>
@@ -99,7 +99,7 @@ cnv.head(3)
     </tr>
     <tr>
       <th>2</th>
-      <td>PGP0002582</td>
+      <td>sample3</td>
       <td>XY</td>
       <td>0.9951</td>
       <td>3105715063</td>

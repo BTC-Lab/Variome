@@ -41,7 +41,7 @@ display(snp_indel.head(1))
   <tbody>
     <tr>
       <th>0</th>
-      <td>PGP00019334</td>
+      <td>sample1</td>
       <td>4881</td>
       <td>5548</td>
       <td>54</td>
@@ -85,7 +85,7 @@ display(snp_indel.head(1))
   <tbody>
     <tr>
       <th>0</th>
-      <td>PGP00019334</td>
+      <td>sample1</td>
       <td>XX</td>
       <td>0.9812</td>
       <td>3105715063</td>

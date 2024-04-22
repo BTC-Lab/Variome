@@ -39,7 +39,7 @@ wgsCov.head(1)
     <tr>
       <th>0</th>
       <td>Average alignment coverage over wgs</td>
-      <td>PGP00019334.wgs_overall_mean_cov.csv</td>
+      <td>sample1.wgs_overall_mean_cov.csv</td>
       <td>42.78</td>
     </tr>
   </tbody>

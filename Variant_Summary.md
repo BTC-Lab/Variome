@@ -82,7 +82,7 @@ for i in chroms:
 
 ```
 
-    b. SNPs script and the same for INDELS
+   b. SNPs script and the same for INDELS
 
 
 ```python

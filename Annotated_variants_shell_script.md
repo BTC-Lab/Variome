@@ -1,12 +1,12 @@
 ### ROH distribution:
 1. Prepare the data used for the ROH and admixture plots
 
-    a. merge the ROH files for each sample to one file "all.roh.bed" 
+  a. merge the ROH files for each sample to one file "all.roh.bed" 
     
-    b. Calculate the total length of ROH and Number of ROH regions for each sample
+  b. Calculate the total length of ROH and Number of ROH regions for each sample
 
 
-```shell
+```
 df = pd.read_table('/path/all.roh.bed')
 
 ## df columns are ['Sample', 'Chromosome', 'Start', 'End', 'Score', '#Homozygous', '#Heterozygous']
@@ -34,7 +34,7 @@ df['sum of regions per samples']    = sum_regions_per_sample
 df.to_csv("num.and.sum.of.regions.csv", index=False)
 ```
 
-    c. The produced file was then merged with admixture data, and consanguinity data
+  c. The produced file was then merged with admixture data, and consanguinity data
  
 
 

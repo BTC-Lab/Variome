@@ -1,7 +1,7 @@
 ### Karyotype Plot:
 1. Prepare the ROH data used to plot the ROH density
     
-    a. merge the ROH files for each sample to one file "all.roh.bed"
+  a. merge the ROH files for each sample to one file "all.roh.bed"
 
 
 ```python
@@ -12,7 +12,7 @@ do
 done
 ```
 
-    b. remove the centromeres from all.roh.bed
+  b. remove the centromeres from all.roh.bed
 
 
 ```python
@@ -22,7 +22,7 @@ bedtools subtract -a all.roh.bed -b centromeres.bed > roh.bed
 
 2. Extract the frequent and infrequent regions to plot 
 
-    a. Create a bedgraph using the ROH regions for all samples
+  a. Create a bedgraph using the ROH regions for all samples
 
 
 ```python
@@ -37,7 +37,7 @@ sort -k 1,1 roh.bed > roh.sorted.bed
 bedtools genomecov -bga -i roh.sorted.bed -g hg38.genome > roh.merged.bed
 ```
 
-    b. Get rare and frequent regions
+  b. Get rare and frequent regions
 
 
 ```python

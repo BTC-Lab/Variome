@@ -1,5 +1,5 @@
 ### Steps for extracting annotated variants summary table:
-## Step 1:
+#### Step 1:
 
 ```python
 #!/bin/bash
@@ -98,72 +98,301 @@ echo "files are split by KNOWN in and out of repeat masker regions!"
 
 ```
 
-  c. The produced file was then merged with admixture data, and consanguinity data
- 
-
+#### Step 2:
 
 ```python
-df = pd.read_csv(path+"num.and.sum.of.regions.csv")
-df.columns = ['sampleID', 'number_of_roh', 'length_of_roh']
+#!/bin/bash
 
-df_admix   = pd.read_csv(path+"metadata_full.csv")
-df_admix = pd.merge(df, df_admix, how='inner', on=['sampleID'])
-df_admix = df_admix[['sampleID', 'number_of_roh', 'length_of_roh', 'main_component']]
+# Create a CSV file to store the results
+output_file="output_files/step1_allVariants_noFiler.csv"
+status="status/status_step2.txt"
 
-df_consang = pd.read_csv(path+"Consang_families.csv")
-df_consang = df_consang.loc[df_consang["consang_poID"].str.contains("Child")]
-df_consang = pd.merge(df, df_consang, how='inner', on=['sampleID'])
-df_consang = df_consang[['sampleID', 'number_of_roh', 'length_of_roh', 'main_component']]
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
 
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
+
+val=("X" "Y" "M")
+# Loop through each file
+for i in {1..22}
+do
+    file="fully_annotated/maf_VEP_chr${i}.txt"
+    file_chr="${file:76}"
+    start_time=$(date +"%H:%M:%S")
+    echo "$file_chr start time: $start_time" >> "$status"
+    
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    
+    # Append the results to the CSV file
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(date +"%H:%M:%S")
+    echo "$file_chr end time: $end_time" >> "$status"
+done
 ```
 
-    d. Prepare data for plotting 
 
+#### Step 3:
 
 ```python
-colors = ["#2CA02C", "#930000", "#1F77B4", "#FFBFD4", "#82CBFF", "#000000"]
-populations = pd.unique(df_admix['main_component'].values)
+#!/bin/bash
 
-color_mapping = {}
-pop_mapping   = {}
-components = {}
+# Create a CSV file to store the results
+output_file="output_files/step3_novelVariants_notRepeat.csv"
+status="status/status_step3.txt"
 
-for p, c, i in zip(populations, colors, range(1,len(colors)+1)):
-    color_mapping[p] = c
-    pop_mapping[c] = p
-    d = 'Component '+str(i)
-    components[c] = d
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
 
+
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
+
+
+# Loop through each file
+for i in {1..22}
+do
+    file="../Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr${i}_not_noRS.txt"
+    file_chr="${file:75}"
+    echo "start ${file_chr}"
+    start_time=$(date +"%H:%M:%S")
+    echo "$file_chr start time: $start_time" >> "$status"
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    # Append the results to the CSV file
+    #echo "${counts1[*]}" >> "$output_file"
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(date +"%H:%M:%S")
+    echo "$file_chr end time: $end_time" >> "$status"
+done
 ```
 
-#### example code for plotting
 
+#### Step 4:
 
 ```python
-# Admixture
+#!/bin/bash
 
-df_admix['color'] = df_admix['main_component'].map(color_mapping)
+# Create a CSV file to store the results
+output_file="output_files/step4_novelVariants_inRepeat.csv"
+status="status/status_step4.txt"
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
 
-# Create a scatter plot
-fig, ax = plt.subplots(figsize=(15,10))
 
-for main_pop in pd.unique(df_admix['main_component'].values):
-    x = df_admix[df_admix['main_component'] == main_pop]['length_of_roh']
-    y = df_admix[df_admix['main_component'] == main_pop]['number_of_roh']
-    color = pd.unique(df_admix[df_admix['main_component'] == main_pop]['color'].values)[0]
-    ax.scatter(x, y, c=color, s=5, label=components.get(color), edgecolors='none')
-    ax.set_xticklabels([0, 0, 200, 400, 600, 800, 1000])
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
 
-# Add legend, labels and title
-plt.legend(markerscale=6, fontsize=15)
-plt.xticks(fontsize=13)
-plt.yticks(fontsize=13)
-
-plt.ylabel('Number of ROH', fontsize=18)
-plt.xlabel('Total length in ROH (Mb)', fontsize=18)
-
-# save and show plot
-plt.savefig("../ROH_distribution_b.png")
-plt.savefig("../ROH_distribution_b.pdf")
-plt.show()
+# Loop through each file
+for file in Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr*_in_noRS.txt
+do
+    file_chr="${file:81}"
+    echo "start ${file_chr}"
+    start_time=$(date +"%H:%M:%S")+4
+    echo "$file_chr start time: $start_time" >> "$status"
+    
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    # Append the results to the CSV file
+    #echo "${counts1[*]}" >> "$output_file"
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(date +"%H:%M:%S")+4
+    echo "$file_chr end time: $end_time" >> "$status"
+done
 ```
+
+
+#### Step 5:
+
+```python
+#!/bin/bash
+
+# Create a CSV file to store the results
+output_file="../output_files/step6_KnownInRepeat.csv"
+status="status/status_step5.txt"
+
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
+
+
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
+
+# Loop through each file
+for file in Table4_repeatmasker_byChr/Table4_repeatmasker_chr*_out.vcf
+do
+    file_chr="${file:46}"
+    echo "start ${file_chr}"
+    start_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    
+    echo "$file_chr start time: $start_time" >> "$status"
+    
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    # Append the results to the CSV file
+    #echo "${counts1[*]}" >> "$output_file"
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "$file_chr end time: $end_time" >> "$status"
+done
+```
+
+
+#### Step 6:
+
+```python
+#!/bin/bash
+
+# Create a CSV file to store the results
+output_file="../output_files/step6_notRepeat_Known.csv"
+status="status/status_step6.txt"
+
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
+
+
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
+
+
+# Loop through each file
+for file in Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr*_not_RS.vcf
+do
+    file_chr="${file:49}"
+    echo "start ${file_chr}"
+    start_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    
+    echo "$file_chr start time: $start_time" >> "$status"
+    
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    # Append the results to the CSV file
+    #echo "${counts1[*]}" >> "$output_file"
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "$file_chr end time: $end_time" >> "$status"
+done
+```
+
+
+#### Step 7:
+
+```python
+#!/bin/bash
+
+# Create a CSV file to store the results
+output_file="../output_files/step7_inRepeat_Known.csv"
+status="status/status_step7.txt"
+
+# Array of keywords
+IFS=$'\n' keywords=($(cat "impacts_table_1less.txt"))
+IFS=$'\n' keywords_all=($(cat "impacts_table.txt"))
+
+
+header="transcript_ablation"
+for keyword in "${keywords[@]}"
+do
+    header="$header,$keyword"
+done
+echo "$header" >> "$output_file"
+
+val=("20" "21" "22" "X" "Y" "M")
+# Loop through each file
+for file in Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr*_In_RS.vcf
+do
+    file_chr="${file:49}"
+    echo "start ${file_chr}"
+    start_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    
+    echo "$file_chr start time: $start_time" >> "$status"
+    
+    # Initialize an array to store counts
+    counts=("$file_chr")  
+    counts1=()
+    # Loop through the keywords and count occurrences in the file
+    for keyword in "${keywords_all[@]}"
+    do
+        count=("$(grep -o -i -w -c "$keyword" "$file")")
+        counts+=("$count")
+        counts1=($(echo "${counts[*]}" | tr '\n' ','))
+    done
+    counts1=${counts1::-1}
+    # Append the results to the CSV file
+    echo "${counts1[*]}" >> "$output_file"
+    end_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "$file_chr end time: $end_time" >> "$status"
+done
+```
+

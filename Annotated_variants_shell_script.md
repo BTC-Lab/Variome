@@ -1,37 +1,101 @@
-### ROH distribution:
-1. Prepare the data used for the ROH and admixture plots
+### Steps for extracting annotated variants summary table:
+## Step 1:
 
-  a. merge the ROH files for each sample to one file "all.roh.bed" 
+```python
+#!/bin/bash
+
+status="status/status_step1.txt"
+
+# filter files based on repeat maseker regions
+for i in {1..22}; do
+echo "chr$i start" >> $status
+    file_name="maf_VEP_chr${i}.txt" # get file name
+    #  varinats in  repeat maseker regions
+    bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_In.vcf --targets-file rmsk.bed  fully_annotated/maf_VEP_chr${i}.txt
     
-  b. Calculate the total length of ROH and Number of ROH regions for each sample
+    #  varinats not in  repeat maseker regions
+    bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_out.vcf --targets-file ^rmsk.bed  fully_annotated/maf_VEP_chr${i}.txt
+
+    echo "$file_name is done"  >> $status
+done 
 
 
-```
-df = pd.read_table('/path/all.roh.bed')
+# the same for chr X,Y,M
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_In.vcf --targets-file rmsk.bed fully_annotated/maf_VEP_chrX.txt # in repeatmasker
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_out.vcf --targets-file ^rmsk.bed  fully_annotated/maf_VEP_chrX.txt # not in repeatmasker
 
-## df columns are ['Sample', 'Chromosome', 'Start', 'End', 'Score', '#Homozygous', '#Heterozygous']
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_In.vcf --targets-file rmsk.bed  /egp-data/research-g42-khalifa-pfs/maf_g42/fully_annotated/maf_Illumina_VEP_chrY.txt # in repeatmaske
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_out.vcf --targets-file ^rmsk.bed  /egp-data/research-g42-khalifa-pfs/maf_g42/fully_annotated/maf_Illumina_VEP_chrY.txt # in repeatmasker
 
-## remove chrX
-df.drop(df[df['Chromosome'] == 'chrX'].index, axis=0, inplace=True)
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_In.vcf --targets-file rmsk.bed fully_annotated/maf_VEP_chrM.txt # in repeatmasker
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_out.vcf --targets-file ^rmsk.bed fully_annotated/maf_VEP_chrM.txt # not in repeatmasker
+echo "files are split by in and out of repeat masker regions!"
 
-samples = df['Sample'].unique()
+###################################################################################################################################################################################################################
+###################################################################################################################################################################################################################
+###################################################################################################################################################################################################################
 
-num_regions_per_sample = []
-sum_regions_per_sample = []
-allsamples = []
-
-#Calculate the total length of ROH and Number of ROH regions for each sample
-for sm in samples:
-    allsamples.append(sm)
-    data = df[df['Sample'] == sm]
-    num_regions_per_sample.append(len(data))
-    sum_regions_per_sample.append(np.sum(data['End'] - data['Start']))
+# check for novel varaints
+for i in {1..22}; do
+    start_time=$(date +"%H:%M:%S")
+    echo "chr$i start time: $start_time" >> "$status"
+    file_name="maf_VEP_chr${i}.txt"
     
-df = pd.DataFrame(columns=['samples', 'number of regions per samples', 'sum of regions per samples'])
-df['samples'] = allsamples
-df['number of regions per samples'] = num_regions_per_sample
-df['sum of regions per samples']    = sum_regions_per_sample
-df.to_csv("num.and.sum.of.regions.csv", index=False)
+    #  NOVEL varinats not in  repeat maseker regions
+    filter_vep -i Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_out.vcf -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr${i}_not_noRS.vcf --filter "not Existing_variation"
+
+    #  NOVEL varinats in  repeat maseker regions
+    filter_vep -i Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_In.vcf -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chr${i}_In_noRS.vcf --filter "not Existing_variation"
+    echo "$file_name is done" 
+    end_time=$(date +"%H:%M:%S")
+    echo "chr$i end time: $end_time" >> "$status"
+done 
+
+# the same for chr X,Y,M
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_out.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrM_not_noRS.vcf -filter "not Existing_variation"
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_In.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrM_In_noRS.vcf -filter "not Existing_variation"
+echo "M done!"
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_out.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrX_not_noRS.vcf -filter "not Existing_variation"
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_In.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrX_In_noRS.vcf -filter "not Existing_variation"
+echo "X done!"
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_out.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrY_not_noRS.vcf -filter "not Existing_variation"
+grep -E Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_In.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_novel/Table4_repeatmasker_chrY_In_noRS.vcf -filter "not Existing_variation"
+echo "Y done!"
+
+echo "files are split by NOVEL in and out of repeat masker regions!"
+
+
+# check for known varaints
+for i in {1..22}; do
+    start_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "chr$i Known start time: $start_time" >> "$status"
+
+    file_name="maf_VEP_chr${i}.txt"
+    #  KNOWN varinats not in  repeat maseker regions
+    filter_vep -i ../Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_out.vcf -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chr${i}_not_RS.vcf --filter "Existing_variation"
+    endy_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "chr$i done not in RR: $endy_time" >> "$status"
+
+    #  KNWON varinats in  repeat maseker regions
+    filter_vep -i ../Table4_repeatmasker_byChr/Table4_repeatmasker_chr${i}_In.vcf -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chr${i}_In_RS.vcf --filter "Existing_variation"
+    echo "$file_name is done" 
+    end_time=$(TZ="Asia/Dubai" date +"%H:%M:%S")
+    echo "chr$i Known end time: $end_time" >> "$status"
+done 
+
+# the same for chr X,Y,M
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_out.vcf | filter_vep -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrM_not_RS.vcf -filter "Existing_variation"
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_In.vcf | filter_vep -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrM_In_RS.vcf -filter "Existing_variation"
+echo "M done!"
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_out.vcf | filter_vep -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrX_not_RS.vcf -filter "Existing_variation"../
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_In.vcf | filter_vep -o Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrX_In_RS.vcf -filter "Existing_variation"
+echo "X done!"
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_out.vcf | filter_vep -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrY_not_RS.vcf -filter "Existing_variation"
+grep -E ../Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_In.vcf | filter_vep -o ../Table4_repeatmasker_byChr/Table4_repeatmasker_Known/Table4_repeatmasker_chrY_In_RS.vcf -filter "Existing_variation"
+echo "Y done!"
+
+echo "files are split by KNOWN in and out of repeat masker regions!"
+
 ```
 
   c. The produced file was then merged with admixture data, and consanguinity data

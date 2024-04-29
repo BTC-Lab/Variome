@@ -24,8 +24,8 @@ done
 bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_In.vcf --targets-file rmsk.bed fully_annotated/maf_VEP_chrX.txt # in repeatmasker
 bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrX_out.vcf --targets-file ^rmsk.bed  fully_annotated/maf_VEP_chrX.txt # not in repeatmasker
 
-bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_In.vcf --targets-file rmsk.bed  /egp-data/research-g42-khalifa-pfs/maf_g42/fully_annotated/maf_Illumina_VEP_chrY.txt # in repeatmaske
-bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_out.vcf --targets-file ^rmsk.bed  /egp-data/research-g42-khalifa-pfs/maf_g42/fully_annotated/maf_Illumina_VEP_chrY.txt # in repeatmasker
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_In.vcf --targets-file rmsk.bed  fully_annotated/maf_VEP_chrY.txt # in repeatmaske
+bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrY_out.vcf --targets-file ^rmsk.bed  fully_annotated/maf_VEP_chrY.txt # in repeatmasker
 
 bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_In.vcf --targets-file rmsk.bed fully_annotated/maf_VEP_chrM.txt # in repeatmasker
 bcftools view -O v -o Table4_repeatmasker_byChr/Table4_repeatmasker_chrM_out.vcf --targets-file ^rmsk.bed fully_annotated/maf_VEP_chrM.txt # not in repeatmasker

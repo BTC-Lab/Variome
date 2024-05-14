@@ -1,10 +1,11 @@
 
-```{r}
+```r
 # INIT --------------------------------------------------------------------
 
 source("scripts/R-header.R")
 set.seed(16341)
 
+```
 
 ## Load meta-data
 ## 1KG phase 3 meta

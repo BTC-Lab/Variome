@@ -6,13 +6,13 @@ set.seed(16341)
 
 ```
 
-## Load meta-data
-## 1KG phase 3 meta
+Load meta-data
+1KG phase 3 meta
 
 ```r
 meta <- readRDS(file = file.path("data/RDS", paste("G1K_meta",".RDS", sep="")))
 ```
-## prep admixture plotting
+prep admixture plotting
 ```r
 options(repr.plot.width=24, repr.plot.height=10)
 cols <- pals::tableau20(20)
@@ -24,8 +24,8 @@ ref_pop <- c("European", "East Asian", "American", "South Asian", "African")
 
 # PREPARE PCA AND ADMIXTURE -----------------------------------------------
 ```
-### extract population SNPs from 1KG and sample VCF
-## get 1K Genome vcf and put them back together 
+extract population SNPs from 1KG and sample VCF
+get 1K Genome vcf and put them back together 
 
 ```r
 # bcftools concat --output-type z \
@@ -55,54 +55,54 @@ ref_pop <- c("European", "East Asian", "American", "South Asian", "African")
 
 ```
 
-## also merge the single-sample vcf files
-# bcftools merge --file-list merge_samples.txt --output-type z --threads 6 > samples_hg38.vcf.gz 
-## remember to index 
-# tabix <filename>
-## make bed-fiel from Inkens' population snps and extract all the variants
-# zgrep -v '^#' WGS_FERNANDES_BUSBY_EUR_AFR_ASIA_FINAL_filtered_0.00.sites > popSNP.bed
+also merge the single-sample vcf files
+bcftools merge --file-list merge_samples.txt --output-type z --threads 6 > samples_hg38.vcf.gz 
+remember to index 
+tabix <filename>
+make bed-fiel from Inkens' population snps and extract all the variants
+zgrep -v '^#' WGS_FERNANDES_BUSBY_EUR_AFR_ASIA_FINAL_filtered_0.00.sites > popSNP.bed
 
-## Extract from samples
-# bcftools view --regions-file popSNP.bed --output-type z --output samples_hg38_popSNP.vcf.gz samples_hg38.vcf.gz
-## aaaand repeat for the 1K Genomes file
-# bcftools view --regions-file popSNP.bed --output-type z 1KG_hg38_popSNP.vcf.gz FULL.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
-## if needed bcftools annotate --rename-chrs chrom_mapping.txt input.vcf -o output.vcf
-# bcftools annotate --threads 6 --rename-chrs rename.txt --output-type z FULL.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz -o output.vcf.gz
+Extract from samples
+bcftools view --regions-file popSNP.bed --output-type z --output samples_hg38_popSNP.vcf.gz samples_hg38.vcf.gz
+aaaand repeat for the 1K Genomes file
+bcftools view --regions-file popSNP.bed --output-type z 1KG_hg38_popSNP.vcf.gz FULL.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz
+if needed bcftools annotate --rename-chrs chrom_mapping.txt input.vcf -o output.vcf
+bcftools annotate --threads 6 --rename-chrs rename.txt --output-type z FULL.shapeit2_integrated_snvindels_v2a_27022019.GRCh38.phased.vcf.gz -o output.vcf.gz
 
 ```r
 # RUN PCA AND PROJECTION IN PLINK -----------------------------------------
 ```
 
-## After joining 1KG and UAE samples we convert to plink and fix the *.fam file to have 6 columns like this:
-## Order of sampleIDs matters here, after conversion the original *.fam should have sampleIDs in the first
-## two columns. That makes some calculations annoying because they request additional flags --> change.
-# sampleID 1 0 0 0 1
+After joining 1KG and UAE samples we convert to plink and fix the *.fam file to have 6 columns like this:
+Order of sampleIDs matters here, after conversion the original *.fam should have sampleIDs in the first
+two columns. That makes some calculations annoying because they request additional flags --> change.
+sampleID 1 0 0 0 1
 
-## Then we take the first two columns and add a third column with the grouping, i.e., UAE & G1K, and create a 'within_cluster.txt'
-## This is used to tell the PCA which Principal components to calculate first.
-# sampleID1 1 UAE
-# sampleID2 1 G1K
+Then we take the first two columns and add a third column with the grouping, i.e., UAE & G1K, and create a 'within_cluster.txt'
+This is used to tell the PCA which Principal components to calculate first.
+sampleID1 1 UAE
+sampleID2 1 G1K
 
-## Then use plink to run PCA and projection (if input is a *.ped this is only --file)
-# plink --threads 60 --bfile UAE_G1K_samples --within within_cluster.txt --pca 40 --pca-cluster-names UAE --make-rel --out UAE_G1K_samples_PCA
-## This will generate 'UAE_G1K_samples_PCA.eigenval' and 'UAE_G1K_samples_PCA.eigenvec' that can now be processed in R
+Then use plink to run PCA and projection (if input is a *.ped this is only --file)
+plink --threads 60 --bfile UAE_G1K_samples --within within_cluster.txt --pca 40 --pca-cluster-names UAE --make-rel --out UAE_G1K_samples_PCA
+This will generate 'UAE_G1K_samples_PCA.eigenval' and 'UAE_G1K_samples_PCA.eigenvec' that can now be processed in R
 
 ```r
 # RUN SUPERVISED ADMIXTURE ------------------------------------------------
 ```
 
-## G1K_meta.RDS contains cleaned up grouping, i.e., source population assignment
-## supervised admixture requires a *.pop file that has the same sample order as
-## the plink file and contains a single column without header. Every known 
-## source population has a label and every unknown sample gets a dash '-'.
+G1K_meta.RDS contains cleaned up grouping, i.e., source population assignment
+supervised admixture requires a *.pop file that has the same sample order as
+the plink file and contains a single column without header. Every known 
+source population has a label and every unknown sample gets a dash '-'.
 
-## Easiest to use the fam file
+Easiest to use the fam file
 ```r
 fam <- data.table::fread(file.path("data/RAW/plink/Admixture", "plink.fam"))
 colnames(fam)[V1] <- "sampleID"
 ```
 
-## merge in meta for G1K
+merge in meta for G1K
 
 ```r
 out.pop <- fam %>%
@@ -110,7 +110,7 @@ out.pop <- fam %>%
   dplyr::mutate(AdmixPopulation = ifelse(is.na(supPopNameClean),"-", supPopNameClean))
 ```
 
-## and save it
+and save it
 
 ```r
 data.table::fwrite(list(out.pop$AdmixPopulation), 
@@ -118,19 +118,19 @@ data.table::fwrite(list(out.pop$AdmixPopulation),
                    row.names = FALSE, col.names = FALSE)
 ```
 
-## and just use:
-# admixture --supervised plink.ped 5
+and just use:
+admixture --supervised plink.ped 5
 
 ```r
 # ADMIXTURE IMPORT --------------------------------------------------------
 ```
 
-# prep. a vector with names of reference populations
+prep. a vector with names of reference populations
 ```r
 ref_pop <- c("European", "EastAsian", "American", "SouthAsian", "African")
 ```
 
-# import admixture output
+import admixture output
 
 ```r
 admix <- data.table::fread(file.path("data/RAW/plink/Admixture", "plink.5.Q"))
@@ -139,7 +139,7 @@ pop <- data.table::fread(file.path("data/RAW/plink/Admixture", "plink.pop"),
                          header = F)
 ```
 
-# build data.frame
+build data.frame
 
 ```r
 df.admix <- data.frame("sampleID"=fam$V1, "popvec"=pop$V1, admix)
@@ -147,7 +147,7 @@ colnames(df.admix) <- c("sampleID","popvec",ref_pop)
 rownames(df.admix) <- df.admix$sampleID
 ```
 
-# find max. admixture ratio for every sample
+find max. admixture ratio for every sample
 
 ```r
 max_vec <- apply(df.admix[,c("European", "EastAsian", "American", "SouthAsian", 
@@ -157,7 +157,7 @@ df.admix <- df.admix %>%
   dplyr::mutate(main_pop = ref_pop[max_vec])
 ```
 
-# save it
+save it
 
 ```r
 saveRDS(df.admix, file = 
@@ -167,13 +167,13 @@ saveRDS(df.admix, file =
 # PCA IMPORT AND PLOTTING -------------------------------------------------
 ```
 
-## load admix info
+load admix info
 
 ```r
 df.admix <- readRDS(file = file.path("data", "RDS", "Admixture_Q5_meta.RDS"))
 ```
 
-## load PCA results and generate plotting data.frames
+load PCA results and generate plotting data.frames
 
 ```r
 df.vec <- data.table::fread( file.path("data/RAW/plink/UAE_PCA", 
@@ -183,13 +183,13 @@ df.val <- data.table::fread( file.path("data/RAW/plink/UAE_PCA",
                                        "UAE_G1K_samples_PCA.eigenval")) 
 ```
 
-## generate annotations for plot
+generate annotations for plot
 
 ```r
 metric.df <- getPlinkPCAMetrics(df.val, df.vec)
 ```
 
-## make plot df - and also merge in metadata / admix information
+make plot df - and also merge in metadata / admix information
 
 ```r
 plot.df <- df.vec[,1:41] %>% data.frame(stringsAsFactors = FALSE) %>%
@@ -199,14 +199,14 @@ plot.df <- df.vec[,1:41] %>% data.frame(stringsAsFactors = FALSE) %>%
   dplyr::left_join(., df.admix, by = "sampleID") 
 ```
 
-## save-it
+save-it
 
 ```r
 saveRDS(list(plot.df, metric.df), file = 
           file.path("data", "RDS", "UAE_G1K_PCA.RDS"), compress = TRUE)
 ```
 
-## generate plot panel - fill/col can be replaced with grouping variables 
+generate plot panel - fill/col can be replaced with grouping variables 
 
 ```r
 pca12 <- panelPCA(plot.df, metric.df, c("PC1","PC2"), fill.var = "PC1", 
@@ -217,7 +217,7 @@ pca34 <- panelPCA(plot.df, metric.df, c("PC3","PC4"), fill.var = "PC3",
                   col.var = "PC4")
 ```
 
-## make a nice panel with letter grouping
+make a nice panel with letter grouping
 
 ```r
 pca.plt <- ggarrange(pca12, pca23, pca34, ncol = 3, labels = c("A)", "B)","C)"), 
@@ -225,7 +225,7 @@ pca.plt <- ggarrange(pca12, pca23, pca34, ncol = 3, labels = c("A)", "B)","C)"),
                                        face = "bold", family = NULL))
 ```
 
-## save to file
+save to file
 
 ```r
 ggsave(file.path("data/output", "PCA_panel_plot.png"), plot = pca.plt, 

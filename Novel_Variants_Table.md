@@ -4717,7 +4717,7 @@ final
 
 
 ```python
-final.to_csv("/home/jovyan/aisha/Paper/results/Table5_partA_77variants_alldata.csv", index = False)
+final.to_csv("Table5_partA_77variants_alldata.csv", index = False)
 ```
 
 
@@ -4942,25 +4942,6 @@ illuMAF['pos'] = illuMAF['pos'].astype(int)+1
 liftover_pos['pos'] = liftover_pos['pos'].astype(int)+1
 ```
 
-    /tmp/ipykernel_59/2303359823.py:5: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      liftover_pos['pos'] = liftover_pos['pos'].astype(int)
-    /tmp/ipykernel_59/2303359823.py:6: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      liftover_pos['end'] = liftover_pos['end'].astype(int)
-    /tmp/ipykernel_59/2303359823.py:11: SettingWithCopyWarning: 
-    A value is trying to be set on a copy of a slice from a DataFrame.
-    Try using .loc[row_indexer,col_indexer] = value instead
-    
-    See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
-      liftover_pos['pos'] = liftover_pos['pos'].astype(int)+1
-    
 
 
 ```python
@@ -5857,12 +5838,6 @@ update_oldTable5_noMod
 </table>
 </div>
 
-
-
-
-```python
-#update_oldTable5_noMod.to_csv("/home/jovyan/aisha/Final_outputs/Table5_update_partb.csv", index = False)
-```
 
 
 ```python

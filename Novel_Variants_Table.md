@@ -705,19 +705,7 @@ final.head(2)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -792,19 +780,7 @@ final
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -2778,19 +2754,7 @@ final
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -4788,19 +4752,7 @@ liftover_pos.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -4844,19 +4796,7 @@ illuMAF.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -4900,19 +4840,7 @@ maf_Illumina_VEP_variants.sort_values(by='pos').head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -4964,19 +4892,7 @@ mgiMAF.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -5079,19 +4995,7 @@ merge_VEP_liftoverPos.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -5155,19 +5059,7 @@ merge_illuminaMAF_liftoverPos.head(1)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -5215,19 +5107,7 @@ update_oldTable5.head(5)
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -5368,19 +5248,7 @@ update_oldTable5_noMod
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
@@ -6005,80 +5873,6 @@ merge_mgiMAF_liftoverPos.head(3)
 ```
 
 
-    ---------------------------------------------------------------------------
-
-    KeyError                                  Traceback (most recent call last)
-
-    Input In [140], in <cell line: 2>()
-          1 # merge with MGI data with new positions
-    ----> 2 merge_mgiMAF_liftoverPos = pd.merge(liftover_pos,mgiMAF, how='inner', on =['chr', 'start', 'end', 'referenceAllele','alternateAlleles'])
-          3 print("Total number of rows: " + str(len(merge_mgiMAF_liftoverPos)))
-          4 merge_mgiMAF_liftoverPos.head(3)
-    
-
-    File /opt/conda/lib/python3.10/site-packages/pandas/core/reshape/merge.py:111, in merge(left, right, how, on, left_on, right_on, left_index, right_index, sort, suffixes, copy, indicator, validate)
-         94 @Substitution("\nleft : DataFrame or named Series")
-         95 @Appender(_merge_doc, indents=0)
-         96 def merge(
-       (...)
-        109     validate: str | None = None,
-        110 ) -> DataFrame:
-    --> 111     op = _MergeOperation(
-        112         left,
-        113         right,
-        114         how=how,
-        115         on=on,
-        116         left_on=left_on,
-        117         right_on=right_on,
-        118         left_index=left_index,
-        119         right_index=right_index,
-        120         sort=sort,
-        121         suffixes=suffixes,
-        122         indicator=indicator,
-        123         validate=validate,
-        124     )
-        125     return op.get_result(copy=copy)
-    
-
-    File /opt/conda/lib/python3.10/site-packages/pandas/core/reshape/merge.py:706, in _MergeOperation.__init__(self, left, right, how, on, left_on, right_on, axis, left_index, right_index, sort, suffixes, indicator, validate)
-        699 self._cross = cross_col
-        701 # note this function has side effects
-        702 (
-        703     self.left_join_keys,
-        704     self.right_join_keys,
-        705     self.join_names,
-    --> 706 ) = self._get_merge_keys()
-        708 # validate the merge keys dtypes. We may need to coerce
-        709 # to avoid incompatible dtypes
-        710 self._maybe_coerce_merge_keys()
-    
-
-    File /opt/conda/lib/python3.10/site-packages/pandas/core/reshape/merge.py:1182, in _MergeOperation._get_merge_keys(self)
-       1178 if lk is not None:
-       1179     # Then we're either Hashable or a wrong-length arraylike,
-       1180     #  the latter of which will raise
-       1181     lk = cast(Hashable, lk)
-    -> 1182     left_keys.append(left._get_label_or_level_values(lk))
-       1183     join_names.append(lk)
-       1184 else:
-       1185     # work-around for merge_asof(left_index=True)
-    
-
-    File /opt/conda/lib/python3.10/site-packages/pandas/core/generic.py:1849, in NDFrame._get_label_or_level_values(self, key, axis)
-       1843     values = (
-       1844         self.axes[axis]
-       1845         .get_level_values(key)  # type: ignore[assignment]
-       1846         ._values
-       1847     )
-       1848 else:
-    -> 1849     raise KeyError(key)
-       1851 # Check for duplicates
-       1852 if values.ndim > 1:
-    
-
-    KeyError: 'start'
-
-
 
 ```python
 maf_Illumina_VEP_variants_final_noMod = maf_Illumina_VEP_variants_final.loc[maf_Illumina_VEP_variants_final['IMPACT']!="MODIFIER"]
@@ -6097,19 +5891,6 @@ merge_illuminaMAF_liftoverPos
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
